@@ -1,0 +1,81 @@
+#!/bin/bash
+
+printf ' \n ====================== Following is the complete detail of AWS Account ======================  \n\n' | tee  /Users/SajjadWasim/Desktop/Doug/5.txt 
+
+
+
+
+aws sts get-caller-identity --output table | tee -a  /Users/SajjadWasim/Desktop/Doug/5.txt 
+
+
+
+printf '\n ====================== Account Summary ======================\n\n' | tee -a  /Users/SajjadWasim/Desktop/Doug/5.txt 
+
+
+aws iam get-account-summary --output table | tee -a  /Users/SajjadWasim/Desktop/Doug/5.txt 
+
+
+printf '\n ====================== List Name Space ====================== \n\n' | tee -a  /Users/SajjadWasim/Desktop/Doug/5.txt 
+
+
+aws route53 list-hosted-zones-by-name | grep Name | tee -a  /Users/SajjadWasim/Desktop/Doug/5.txt 
+
+ 
+ 
+ printf '\n ====================== Complete Details of Instance ====================== \n\n' | tee -a  /Users/SajjadWasim/Desktop/Doug/5.txt 
+
+
+
+aws ec2 describe-instances --query 'Reservations[*].Instances[*].{Instance:InstanceId, InstanceType:InstanceType, LaunchTime:LaunchTime, Monitoring:Monitoring.State, AZ:Placement.AvailabilityZone, HostName:PrivateDnsName, PrivateIpAddress:PrivateIpAddress, SecurityGroups:SecurityGroups[0].GroupName, TagName:Tags[?Key==`Name`]|[0].Value,TagCustomer:Tags[?Key==`customer`]|[0].Value,TagApplication:Tags[?Key==`application`]|[0].Value}' --output table | tee -a  /Users/SajjadWasim/Desktop/Doug/5.txt 
+
+
+#aws ec2 describe-instances --query 'Reservations[*].Instances[*].{Instance:InstanceId, InstanceType:InstanceType, LaunchTime:LaunchTime, Monitoring:Monitoring.State, AZ:Placement.AvailabilityZone, HostName:PrivateDnsName, PrivateIpAddress:PrivateIpAddress, SecurityGroups:SecurityGroups[0].GroupName, NTag:Tags[?Key==`Name`]|[0].Value}' --output table | tee -a  /Users/SajjadWasim/Desktop/Doug/5.txt 
+
+
+#aws ec2 describe-instances --query 'Reservations[*].Instances[*].{Instance:InstanceId, InstanceType:InstanceType, LaunchTime:LaunchTime, Monitoring:Monitoring.State, Subnet:SubnetId, AZ:Placement.AvailabilityZone}' --output table  | tee -a  /Users/SajjadWasim/Desktop/Doug/5.txt 
+
+
+printf '\n ====================== List of the Volumes ====================== \n\n' | tee -a  /Users/SajjadWasim/Desktop/Doug/5.txt 
+
+
+
+aws ec2 describe-volumes --query 'Volumes[*].{ID:VolumeId,InstanceId:Attachments[0].InstanceId,AZ:AvailabilityZone,Size:Size}' --output table | tee -a  /Users/SajjadWasim/Desktop/Doug/5.txt 
+
+
+printf '\n ====================== List Cluster ====================== \n\n' | tee -a  /Users/SajjadWasim/Desktop/Doug/5.txt 
+
+
+ aws rds describe-db-clusters --query 'DBClusters[].{DBClusterIdentifier:DBClusterIdentifier,Engine:Engine} | [?Engine == `aurora-postgresql`]' --output table | tee -a  /Users/SajjadWasim/Desktop/Doug/5.txt 
+ 
+ 
+ printf '\n ====================== List Database ====================== \n\n' | tee -a  /Users/SajjadWasim/Desktop/Doug/5.txt 
+ 
+ 
+  aws rds describe-db-instances --query 'DBInstances[*].[DBName,DBInstanceIdentifier]' --output table  | tee -a  /Users/SajjadWasim/Desktop/Doug/5.txt 
+
+
+#printf '\n ====================== Detail Information about Database  ====================== \n\n' | tee -a  /Users/SajjadWasim/Desktop/Doug/5.txt 
+
+
+#aws rds describe-db-parameter-groups --output table  | tee -a  /Users/SajjadWasim/Desktop/Doug/5.txt  
+
+
+printf '\n ====================== List of Lambda Functions  ====================== \n\n' | tee -a  /Users/SajjadWasim/Desktop/Doug/5.txt 
+
+aws lambda list-functions --output table | tee -a  /Users/SajjadWasim/Desktop/Doug/5.txt  
+
+
+
+printf '\n ====================== List of users  ====================== \n\n' | tee -a  /Users/SajjadWasim/Desktop/Doug/5.txt 
+
+aws iam list-users --output table | tee -a  /Users/SajjadWasim/Desktop/Doug/5.txt  
+
+
+printf '\n ====================== List of S3 Buckets  ====================== \n\n' | tee -a  /Users/SajjadWasim/Desktop/Doug/5.txt 
+
+
+aws s3api list-buckets --query "Buckets[].Name" --output table  | tee -a  /Users/SajjadWasim/Desktop/Doug/5.txt  
+
+
+
+printf '\n\n <<<<<<<<<<<<<<<<<<<<<<     THE END    >>>>>>>>>>>>>>>>>>>>>>>>\n\n' | tee -a  /Users/SajjadWasim/Desktop/Doug/5.txt 
